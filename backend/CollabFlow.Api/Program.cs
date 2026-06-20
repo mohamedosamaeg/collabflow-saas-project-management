@@ -1,7 +1,14 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using CollabFlow.Api.Data;
+using Microsoft.EntityFrameworkCore;
+
+var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("DefaultConnection is missing.");
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
 var app = builder.Build();
 
